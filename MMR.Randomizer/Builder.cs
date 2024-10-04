@@ -25,6 +25,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp.Formats.Png;
 using System.Security.Cryptography;
+using MMR.Common.Utils;
 
 namespace MMR.Randomizer
 {
@@ -6142,6 +6143,82 @@ namespace MMR.Randomizer
             }
         }
 
+        public void OutputHashJson(IEnumerable<byte> iconIndices, string filename)
+        {
+            var iconNames = new Dictionary<byte, string>
+            {
+                { 0, "ITEM_OCARINA" },
+                { 1, "ITEM_BOW" },
+                { 2, "ITEM_FIRE_ARROW" },
+                { 3, "ITEM_ICE_ARROW" },
+                { 4, "ITEM_LIGHT_ARROW" },
+                { 6, "ITEM_BOMB" },
+                { 7, "ITEM_BOMBCHU" },
+                { 8, "ITEM_DEKU_STICK" },
+                { 9, "ITEM_DEKU_NUT" },
+                { 10, "ITEM_MAGIC_BEAN" },
+                { 12, "ITEM_POWDER_KEG" },
+                { 13, "ITEM_PICTOGRAPH" },
+                { 14, "ITEM_LENS" },
+                { 15, "ITEM_HOOKSHOT" },
+                { 16, "ITEM_FAIRY_SWORD" },
+                { 18, "ITEM_EMPTY_BOTTLE" },
+                { 23, "ITEM_DEKU_PRINCESS" },
+                { 27, "ITEM_BUGS" },
+                { 30, "ITEM_BIG_POE" },
+                { 32, "ITEM_HOT_WATER" },
+                { 33, "ITEM_ZORA_EGG" },
+                { 34, "ITEM_GOLD_DUST_BOTTLE" },
+                { 35, "ITEM_MUSHROOM" },
+                { 36, "ITEM_SEAHORSE" },
+                { 37, "ITEM_CHATEAU_ROMANI_BOTTLE" },
+                { 40, "ITEM_MOON_TEAR" },
+                { 41, "ITEM_TOWN_DEED" },
+                { 45, "ITEM_ROOM_KEY" },
+                { 46, "ITEM_MAMA_LETTER" },
+                { 47, "ITEM_KAFEI_LETTER" },
+                { 48, "ITEM_PENDANT" },
+                { 49, "ITEM_MAP" },
+                { 50, "ITEM_DEKU_MASK" },
+                { 51, "ITEM_GORON_MASK" },
+                { 52, "ITEM_ZORA_MASK" },
+                { 53, "ITEM_FIERCE_DEITY_MASK" },
+                { 54, "ITEM_MASK_OF_TRUTH" },
+                { 55, "ITEM_KAFEI_MASK" },
+                { 56, "ITEM_ALL_NIGHT_MASK" },
+                { 57, "ITEM_BUNNY_HOOD" },
+                { 58, "ITEM_KEATON_MASK" },
+                { 59, "ITEM_GARO_MASK" },
+                { 60, "ITEM_ROMANI_MASK" },
+                { 61, "ITEM_CIRCUS_LEADER_MASK" },
+                { 62, "ITEM_POSTMAN_HAT" },
+                { 63, "ITEM_COUPLE_MASK" },
+                { 64, "ITEM_GREAT_FAIRY_MASK" },
+                { 65, "ITEM_GIBDO_MASK" },
+                { 66, "ITEM_DON_GERO_MASK" },
+                { 67, "ITEM_KAMARO_MASK" },
+                { 68, "ITEM_CAPTAIN_HAT" },
+                { 69, "ITEM_STONE_MASK" },
+                { 70, "ITEM_BREMEN_MASK" },
+                { 71, "ITEM_BLAST_MASK" },
+                { 72, "ITEM_MASK_OF_SCENTS" },
+                { 73, "ITEM_GIANT_MASK" },
+                { 77, "ITEM_KOKIRI_SWORD" },
+                { 79, "ITEM_GILDED_SWORD" },
+                { 80, "ITEM_HELIX_SWORD" },
+                { 81, "ITEM_HERO_SHIELD" },
+                { 82, "ITEM_MIRROR_SHIELD" },
+                { 84, "ITEM_QUIVER_40" },
+                { 90, "ITEM_ADULT_WALLET" },
+                { 97, "ITEM_BOMBERS_NOTEBOOK" },
+            };
+            var hashOutput = new HashOutputJson
+            {
+                Hash = iconIndices.Select(iconIndex => iconNames.GetValueOrDefault(iconIndex)).ToList()
+            };
+            File.WriteAllText(filename, JsonSerializer.Serialize(hashOutput));
+        }
+
         private void WriteAsmPatch(AsmContext asm)
         {
             // Load the symbols and use them to apply the patch data
@@ -6410,7 +6487,15 @@ namespace MMR.Randomizer
                 if (_randomized.Settings.DrawHash || outputSettings.GeneratePatch)
                 {
                     var iconStripIcons = asm.Symbols.ReadHashIconsTable();
-                    OutputHashIcons(ImageUtils.GetIconIndices(hash).Select(index => iconStripIcons[index]), Path.ChangeExtension(outputSettings.OutputROMFilename, "png"));
+                    var iconFileIndices = ImageUtils.GetIconIndices(hash).Select(index => iconStripIcons[index]);
+                    var directory = Path.GetDirectoryName(outputSettings.OutputROMFilename);
+                    var filename = Path.GetFileNameWithoutExtension(outputSettings.OutputROMFilename);
+                    OutputHashIcons(iconFileIndices, Path.Combine(directory, filename + ".png"));
+
+                    if (outputSettings.GenerateHashJson)
+                    {
+                        OutputHashJson(iconFileIndices, Path.Combine(directory, filename + "_Hash.json"));
+                    }
                 }
             }
             WriteMiscellaneousChanges();

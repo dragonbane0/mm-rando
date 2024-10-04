@@ -57,6 +57,9 @@ namespace MMR.Randomizer.Models.Settings
         [JsonIgnore]
         public bool GenerateSettingsJson { get; set; }
 
+        [JsonIgnore]
+        public bool GenerateHashJson { get; set; }
+
         /// <summary>
         /// Generate patch file
         /// </summary>

@@ -449,6 +449,7 @@ namespace MMR.CLI
             configuration.OutputSettings.GenerateROM |= argsDictionary.ContainsKey("-rom");
             configuration.OutputSettings.GenerateSpoilerLogJson |= argsDictionary.ContainsKey("-spoilerJson");
             configuration.OutputSettings.GenerateSettingsJson |= argsDictionary.ContainsKey("-infoJson");
+            configuration.OutputSettings.GenerateHashJson |= argsDictionary.ContainsKey("-hashJson");
 
             int seed;
             if (argsDictionary.ContainsKey("-seed"))
