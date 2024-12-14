@@ -462,6 +462,7 @@ namespace MMR.CLI
                 seed = new Random().Next();
             }
 
+
             var outputArg = argsDictionary.GetValueOrDefault("-output");
             if (outputArg != null)
             {
