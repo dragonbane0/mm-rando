@@ -1,4 +1,4 @@
-﻿using MMR.Randomizer.Models.Settings;
+using MMR.Randomizer.Models.Settings;
 using MMR.Randomizer.Models;
 using MMR.Randomizer;
 using MMR.Randomizer.GameObjects;
@@ -444,6 +444,7 @@ namespace MMR.CLI
 
             configuration.OutputSettings.InputPatchFilename = argsDictionary.GetValueOrDefault("-inputpatch")?.SingleOrDefault();
             configuration.OutputSettings.GeneratePatch |= argsDictionary.ContainsKey("-outputpatch");
+            configuration.OutputSettings.GenerateCosmeticsPatch |= argsDictionary.ContainsKey("-cosmeticspatch");
             configuration.OutputSettings.GenerateSpoilerLog |= argsDictionary.ContainsKey("-spoiler");
             configuration.OutputSettings.GenerateHTMLLog |= argsDictionary.ContainsKey("-html");
             configuration.OutputSettings.GenerateROM |= argsDictionary.ContainsKey("-rom");
@@ -460,7 +461,6 @@ namespace MMR.CLI
             {
                 seed = new Random().Next();
             }
-
 
             var outputArg = argsDictionary.GetValueOrDefault("-output");
             if (outputArg != null)

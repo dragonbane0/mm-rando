@@ -67,13 +67,20 @@ namespace MMR.Randomizer.Models.Settings
         [Description("Output a patch file that can be applied using the Patch settings tab to reproduce the same ROM.\nPatch file includes all settings except Tunic and Tatl color.")]
         public bool GeneratePatch { get; set; }
 
+        /// <summary>
+        /// Generate cosmetics patch file
+        /// </summary>
+        [SettingName("Cosmetics Patch .mmr")]
+        [Description("Output a cosmetics patch file.")]
+        public bool GenerateCosmeticsPatch { get; set; }
+
         public string Validate()
         {
-            if (!GenerateROM && !OutputVC && (InputPatchFilename != null || (!GeneratePatch && !GenerateSpoilerLog && !GenerateHTMLLog)))
+            if (!GenerateROM && !OutputVC && ((InputPatchFilename != null && !GenerateCosmeticsPatch) || (!GeneratePatch && !GenerateCosmeticsPatch && !GenerateSpoilerLog && !GenerateHTMLLog)))
             {
                 return "No output selected.";
             }
-            if ((GenerateROM || GeneratePatch || OutputVC) && !File.Exists(InputROMFilename))
+            if ((GenerateROM || GeneratePatch || GenerateCosmeticsPatch || OutputVC) && !File.Exists(InputROMFilename))
             {
                 return "Input ROM not found, cannot generate output.";
             }

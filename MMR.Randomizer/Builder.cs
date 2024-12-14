@@ -116,7 +116,7 @@ namespace MMR.Randomizer
 
         private void WriteAudioSeq(Random random, OutputSettings _settings)
         {
-            if (_cosmeticSettings.Music == Music.None)
+            if (_cosmeticSettings.Music == Music.None || _settings.GenerateCosmeticsPatch)
             {
                 return;
             }
@@ -6352,6 +6352,7 @@ namespace MMR.Randomizer
             RomData.SceneList = null;
 
             var originalMMFileList = RomData.MMFileList.Select(file => file.Clone()).ToList();
+            List<MMFile> postPatchMMFileList = null;
 
             byte[] hash;
             AsmContext asm;
@@ -6359,6 +6360,8 @@ namespace MMR.Randomizer
             {
                 progressReporter.ReportProgress(50, "Applying patch...");
                 hash = Patch.Patcher.ApplyPatch(outputSettings.InputPatchFilename);
+
+                postPatchMMFileList = RomData.MMFileList.Select(file => file.Clone()).ToList();
 
                 // Parse Symbols data from the ROM (specific MMFile)
                 asm = AsmContext.LoadFromROM();
@@ -6566,8 +6569,15 @@ namespace MMR.Randomizer
                     VCInjectionUtils.BuildVC(ROM, _cosmeticSettings.AsmOptions.DPadConfig, Values.VCDirectory, fileName);
                 }
             }
-            progressReporter.ReportProgress(100, "Done!");
+            else if (outputSettings.GenerateCosmeticsPatch && !string.IsNullOrWhiteSpace(outputSettings.InputPatchFilename))
+            {
+                var directory = Path.GetDirectoryName(outputSettings.OutputROMFilename);
+                var filename = Path.GetFileNameWithoutExtension(outputSettings.OutputROMFilename);
+              
+                Patch.Patcher.CreatePatch(Path.Combine(directory, filename + "_Cosmetic.mmr"), postPatchMMFileList);
+            }
 
+            progressReporter.ReportProgress(100, "Done!");
         }
 
     }
