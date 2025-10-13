@@ -321,5 +321,3 @@ Amount must be ≤ items selected in the group.`;
 
   constructor(protected ref: NbDialogRef<MMRGuiDetailedConfigWindowComponent>, private dialogService: NbDialogService) {}
 }
-
-
