@@ -249,7 +249,7 @@ export class GUISettingsElement implements OnInit {
         configMode: 'randomStartingItemGroups'
       }
     });
-    this.resizeDialogToAppContainer('.mmrHintPriorities-window', 0.78, 0.78);
+    this.resizeDialogToAppContainer('.mmrGuiDetailedConfig-window', 0.78, 0.78);
     dialogRef.onClose.subscribe(result => {
       if (result) {
         this.app.afterSettingChange();
@@ -283,7 +283,7 @@ export class GUISettingsElement implements OnInit {
     });
 
     // Set dialog size based on app container immediately
-    this.resizeDialogToAppContainer('.mmrHintPriorities-window', 0.78, 0.78);
+    this.resizeDialogToAppContainer('.mmrGuiDetailedConfig-window', 0.78, 0.78);
 
     dialogRef.onClose.subscribe(result => {
 
@@ -364,7 +364,7 @@ export class GUISettingsElement implements OnInit {
       } else {
         const alternativeSelectors = [
           '.mmrItemSelector-window',
-          '.mmrHintPriorities-window',
+          '.mmrGuiDetailedConfig-window',
           '[class*="ItemSelector"]',
           '[class*="HintPriorities"]'
         ];
