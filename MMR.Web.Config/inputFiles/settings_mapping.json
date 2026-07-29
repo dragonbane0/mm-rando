@@ -126,7 +126,6 @@
           "row_span": [ 4, 6, 6 ],
           "settings": [
             "GameplaySettings.ItemPlacement",
-            "GameplaySettings.RandomStartingItemGroups",
             "GameplaySettings.EnemyMode",
             "GameplaySettings.EntranceMode",
             "GameplaySettings.BossKeyMode",
@@ -144,7 +143,8 @@
             "GameplaySettings.RandomizeGibdoRequirements",
             "GameplaySettings.AddSongs",
             "GameplaySettings.StartingItemMode",
-            "Web.RandomStartingItemGroups"
+            "Web.RandomStartingItemGroups",
+            "GameplaySettings.RandomStartingItemGroups"
           ]
         }
       ]
